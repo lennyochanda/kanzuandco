@@ -1,10 +1,15 @@
 <script lang="ts">
+  import NavLinks from './NavLinks.svelte';
+
+  export let items: any[] = [];
+
   let cartCount = 0;
   let searchQuery = '';
   let isMobileMenuOpen = false;
 
   const toggleMobileMenu = () => {
     isMobileMenuOpen = !isMobileMenuOpen;
+    console.log('Mobile menu toggled:', isMobileMenuOpen);
   };
 
   const handleSearch = () => {
@@ -34,7 +39,7 @@
             bind:value={searchQuery}
           />
         </div>
-        <button class="search-button" on:click={handleSearch}>
+        <button class="search-button" on:click={handleSearch} aria-label="Search">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
             <path d="M8.625 15.75C12.56 15.75 15.75 12.56 15.75 8.625C15.75 4.68997 12.56 1.5 8.625 1.5C4.68997 1.5 1.5 4.68997 1.5 8.625C1.5 12.56 4.68997 15.75 8.625 15.75Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M16.5 16.5L15 15" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -59,46 +64,39 @@
 
     <!-- Menu Navbar -->
     <div class="menu-navbar">
-      <div class="menu-items">
-        <a href="#" class="menu-item">Shop All</a>
-        <div class="menu-item-dropdown">
-          <span class="menu-item">Flower</span>
-          <svg width="13" height="12" viewBox="0 0 13 12" fill="none">
-            <path d="M10.46 4.47461L7.20004 7.73461C6.81504 8.11961 6.18504 8.11961 5.80004 7.73461L2.54004 4.47461" stroke="#46494F" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <a href="#" class="menu-item">Edibles</a>
-        <div class="menu-item-dropdown">
-          <span class="menu-item">Concentrates</span>
-          <svg width="13" height="12" viewBox="0 0 13 12" fill="none">
-            <path d="M10.46 4.47461L7.20004 7.73461C6.81504 8.11961 6.18504 8.11961 5.80004 7.73461L2.54004 4.47461" stroke="#46494F" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <a href="#" class="menu-item">Mushrooms</a>
-        <div class="menu-item-dropdown">
-          <span class="menu-item">Promotions/Bundles</span>
-          <svg width="13" height="12" viewBox="0 0 13 12" fill="none">
-            <path d="M10.46 4.47461L7.20004 7.73461C6.81504 8.11961 6.18504 8.11961 5.80004 7.73461L2.54004 4.47461" stroke="#46494F" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <div class="menu-item-dropdown">
-          <span class="menu-item">Support</span>
-          <svg width="13" height="12" viewBox="0 0 13 12" fill="none">
-            <path d="M10.46 4.47461L7.20004 7.73461C6.81504 8.11961 6.18504 8.11961 5.80004 7.73461L2.54004 4.47461" stroke="#46494F" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <a href="#" class="menu-item">Rewards</a>
-        <a href="#" class="menu-item">Blog</a>
-      </div>
+      <NavLinks {items} />
     </div>
   </div>
+
+    {#if isMobileMenuOpen}
+      <div
+        class="mobile-menu-overlay"
+        role="button"
+        tabindex="0"
+        on:click={toggleMobileMenu}
+        on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleMobileMenu()}
+      ></div>
+
+      <div class="mobile-menu" role="dialog" aria-modal="true" tabindex="-1">
+        <div class="mobile-menu-header">
+          <button class="close-button" on:click={toggleMobileMenu} aria-label="Close Menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M6 6L18 18" stroke="#062A09" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M6 18L18 6" stroke="#062A09" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <NavLinks mobile={true} {items} />
+      </div>
+    {/if}
 
   <!-- Mobile Navigation -->
   <div class="nav-mobile">
     <!-- Mobile Header -->
     <div class="mobile-header">
       <div class="mobile-left">
-        <button class="hamburger-menu" on:click={toggleMobileMenu}>
+        <button class="hamburger-menu" on:click={() => toggleMobileMenu()} aria-label="Toggle Menu">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path d="M3 7H21" stroke="#062A09" stroke-width="1.5" stroke-linecap="round"/>
             <path d="M3 12H21" stroke="#062A09" stroke-width="1.5" stroke-linecap="round"/>
@@ -137,7 +135,7 @@
           bind:value={searchQuery}
         />
       </div>
-      <button class="mobile-search-button" on:click={handleSearch}>
+      <button class="mobile-search-button" on:click={() => handleSearch()} aria-label="Search">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <path d="M7.66634 13.9997C11.1641 13.9997 13.9997 11.1641 13.9997 7.66634C13.9997 4.16854 11.1641 1.33301 7.66634 1.33301C4.16854 1.33301 1.33301 4.16854 1.33301 7.66634C1.33301 11.1641 4.16854 13.9997 7.66634 13.9997Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M14.6663 14.6663L13.333 13.333" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
@@ -276,32 +274,6 @@
     height: 56px;
   }
 
-  .menu-items {
-    display: flex;
-    align-items: center;
-    gap: 40px;
-  }
-
-  .menu-item {
-    color: #46494F;
-    font-family: Lexend, -apple-system, Roboto, Helvetica, sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 150%;
-    text-decoration: none;
-  }
-
-  .menu-item-dropdown {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-  }
-
-  .menu-item-dropdown svg {
-    padding-top: 2px;
-  }
-
   /* Mobile Navigation */
   .nav-mobile {
     display: block;
@@ -364,6 +336,46 @@
     border-bottom: 1px solid #F4F4F4;
     height: 60px;
   }
+
+  .mobile-menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.3);
+    z-index: 40;
+  }
+
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    background: #FFF;
+    z-index: 50;
+    box-shadow: 2px 0 12px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+  }
+
+  .mobile-menu-header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 8px;
+  }
+
+  .close-button {
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* mobile menu item styles moved into NavLinks.svelte */
 
   .mobile-search-input-container {
     display: flex;

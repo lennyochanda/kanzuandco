@@ -1,16 +1,24 @@
 <script>
-  import Notification from '$lib/components/Notification.svelte';
-  import Navigation from '$lib/components/Navigation.svelte';
   import Hero from '$lib/components/Hero.svelte';
+  import PromoBanner from '$lib/components/PromoBanner.svelte';
+  import CategoryShowcase from '$lib/components/CategoryShowcase.svelte';
+  import FeaturedGrid from '$lib/components/FeaturedGrid.svelte';
+  import Footer from '$lib/components/Footer.svelte';
 </script>
 
-<Notification />
-<Navigation />
 <Hero />
 
+<PromoBanner />
+
 <main>
-  <h1>Welcome to SvelteKit</h1>
-  <p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+  <CategoryShowcase />
+  <FeaturedGrid />
+</main>
+
+<Footer />
+
+<main>
+
 </main>
 
 <style>
